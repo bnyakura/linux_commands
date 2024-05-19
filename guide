@@ -1,0 +1,76 @@
+# Update your repositories to ensure you have the latest package information
+sudo apt update
+
+# Upgrade your system to apply any available updates
+sudo apt dist-upgrade
+
+# Install the Automatic Update utility if it's not already installed
+sudo apt install unattended-upgrades
+
+# Enable the Automatic Update utility to keep your system updated automatically
+sudo dpkg-reconfigure --priority=low unattended-upgrades
+
+# Open the SSH configuration file for editing
+sudo nano /etc/ssh/sshd_config
+
+# Change the default SSH port from 22 to a custom port (e.g., 227). 
+# Ensure you choose a port that's not commonly used and doesn't conflict with other services.
+# Install UFW (Uncomplicated Firewall) if you don't have it
+sudo apt install ufw
+
+# Allow necessary ports through the firewall
+sudo ufw allow 227 # Custom SSH port
+sudo ufw allow 80  # HTTP
+sudo ufw allow 443 # HTTPS
+sudo ufw allow 22  # SSH (in case you're still using default port)
+
+# Install Apache server on Ubuntu
+sudo apt install apache2
+
+# Install PHP runtime and PHP MySQL connector for Apache
+sudo apt install php libapache2-mod-php php-mysql
+
+# Install MySQL server
+sudo apt install mysql-server 
+
+# Log in to MySQL server
+sudo mysql -u root
+
+# Change authentication plugin to mysql_native_password (change the password to something strong)
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Testpassword@123';
+exit;
+
+# Install certbot for managing SSL certificates
+sudo apt-get update
+sudo apt install certbot python3-certbot-apache
+
+# Request and install SSL certificate for your site with certbot
+sudo certbot --apache
+sudo mysql_secure_installation
+
+# Create a new database user for WordPress (change the password to something strong)
+mysql -u root -p
+
+# Enter your password when prompted
+CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'Testpassword@123';
+
+# Create a database for WordPress
+CREATE DATABASE wp;
+
+# Grant all privileges on the database 'wp' to the newly created user
+GRANT ALL PRIVILEGES ON wp.* TO 'wp_user'@localhost;
+
+# Download WordPress
+cd /tmp
+wget https://wordpress.org/latest.tar.gz
+
+# Unzip
+tar -xvf latest.tar.gz
+
+# Move WordPress folder to Apache document root
+sudo mv wordpress/ /var/www/html
+
+# Command to restart/reload Apache server
+sudo systemctl restart apache2
+# OR
+sudo systemctl reload apache2
